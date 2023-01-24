@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Add Task</title>
+    <title>Edit Task</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -29,9 +29,9 @@
     </div>
     <% } %>
     <div class="card">
-      <div class="card-header">Add Task</div>
+      <div class="card-header">Edit Task</div>
       <div class="card-body">
-        <form action="/add" method="post">
+        <form action="/update/<%= data.id %>" method="post">
           <div class="form-group" style="margin: 1em;">
             <label>Team Member:</label>
             <input
@@ -67,7 +67,7 @@
             </select>
           </div>
           <div class="form-group" style="margin: 1em;">
-            <input type="submit" class="btn btn-info" value="Add" />
+            <input type="submit" class="btn btn-info" value="Update" />
           </div>
         </form>
       </div>

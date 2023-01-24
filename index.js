@@ -40,10 +40,10 @@ app.get('/', function(req, res, next) {
 
 //Get todo list 
 
+
 //Add task
 app.get('/add', function(req, res, next) {    
     // render to add.ejs
-    // res.render('add')
     res.render('add', {data : {
         team_member: '',
         title: '',
@@ -51,43 +51,115 @@ app.get('/add', function(req, res, next) {
     }, error: ''})
   })
 
-  app.post('/add',  function(req, res, next){
-    // add a new task
+app.post('/add',  function(req, res, next){
+// add a new task
+let team_member = req.body.team_member;
+let title = req.body.title;
+let priority = req.body.priority;
+
+var form_data = {
+    team_member: team_member,
+    title: title,
+    priority: priority
+}
+// validae data, and render back to add.ejs if needed
+if(team_member == '') {
+    res.render('add', {data: form_data, error: "Team member can't be empty"})
+}
+else if(title == '') {
+    res.render('add', {data: form_data, error: "Title can't be empty"})
+}
+else if(priority == 'Pick priority') {
+    res.render('add', {data: form_data, error: "Please pick priority"})
+}
+else {
+    // insert query
+    dbConn.query('INSERT INTO ' + table +' SET ?', form_data, function(err, result) {
+    if (err) {
+        console.error("Couldn't add task: " + err)
+        // render to add.ejs
+        res.render('add', {data: form_data, error: "Couldn't add task: " + err})
+    } else {
+        console.log ('Task '+ title +' was added to DB successfully')          
+        res.redirect('/');
+    }
+    })
+}
+})
+
+//************************************************************************* */
+// Edit task:
+
+// display edit task page
+app.get('/edit/(:id)', function(req, res, next) {
+    let id = req.params.id;
+    dbConn.query('SELECT * FROM ' + table + ' WHERE id = ' + id, function(err, rows, fields) {
+        if(err) {
+            // render to views/error-page.ejs
+            res.render('error-page',{error:err}); 
+        }
+        // if task not found
+        else if (rows.length <= 0) {
+            console.error('Task not found with id = ' + id)
+            // render to views/error-page.ejs
+            res.render('error-page',{error:{errno: '404', code: 'Not Found', sqlMessage: 'Task not found with id = ' + id}}); 
+        }
+        // if task found
+        else {
+            // render to edit.ejs
+            res.render('edit', {data : {
+                id: rows[0].id,
+                team_member: rows[0].team_member,
+                title: rows[0].title,
+                priority: rows[0].priority,
+                is_finished: rows[0].is_finished
+            }, error: ''})
+        }
+    })
+    })
+    
+    // update task data
+    app.post('/update/:id', function(req, res, next) {
+    let id = req.params.id;
     let team_member = req.body.team_member;
     let title = req.body.title;
     let priority = req.body.priority;
 
     var form_data = {
-        team_member: team_member,
+        id: id,
         title: title,
+        team_member: team_member,
         priority: priority
     }
-    // validae data, and render back to add.ejs if needed
+
+    // validae data, and render back to edit.ejs if needed
     if(team_member == '') {
-        res.render('add', {data: form_data, error: "Team member can't be empty"})
+        res.render('edit', {data: form_data, error: "Team member can't be empty"})
     }
     else if(title == '') {
-        res.render('add', {data: form_data, error: "Title can't be empty"})
+        res.render('edit', {data: form_data, error: "Title can't be empty"})
     }
     else if(priority == 'Pick priority') {
-        res.render('add', {data: form_data, error: "Please pick priority"})
+        res.render('edit', {data: form_data, error: "Please pick priority"})
     }
     else {
-        // insert query
-        dbConn.query('INSERT INTO ' + table +' SET ?', form_data, function(err, result) {
-        if (err) {
-            console.error("Couldn't add task: " + err)
-            // render to add.ejs
-            res.render('add', {data: form_data, error: "Couldn't add task: " + err})
-        } else {
-            console.log ('Task '+ title +' was added to DB successfully')          
-            res.redirect('/');
-        }
+        // update query
+        dbConn.query('UPDATE ' + table + ' SET ? WHERE id = ' + id, form_data, function(err, result) {
+            if (err) {
+                console.error("Couldn't update task: " + err)
+                // render to edit.ejs
+                res.render('edit', {data: form_data, error: "Couldn't update task: " + err})
+            }
+            else {
+                console.log('Task successfully updated');
+                res.redirect('/');
+            }
         })
     }
-  })
+    })
 
-//Edit task
+//************************************************************************* */
+
 
 //Delete task
 app.get('/delete/(:id)', function(req, res, next) {
@@ -106,6 +178,7 @@ app.get('/delete/(:id)', function(req, res, next) {
         }
     })
   })
+
 
 //Update task
 
