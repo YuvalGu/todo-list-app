@@ -2,7 +2,10 @@ require("dotenv").config(); // ALLOWS ENVIRONMENT VARIABLES TO BE SET ON PROCESS
 const path = require('path');
 const express = require("express");
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }))
 const mysql = require('mysql');
+const table = process.env.DB_TABLE;
 
 //Create connection
 const dbConn = mysql.createConnection({
@@ -29,8 +32,8 @@ app.get('/', function(req, res, next) {
             res.render('error-page',{error:err}); 
         } else {
             // render to views/books/index.ejs
-            // res.render('index',{data:rows});
-            res.send(rows); 
+            res.render('index',{data:rows});
+            // res.send(rows); 
         }
     });
   });
@@ -38,10 +41,71 @@ app.get('/', function(req, res, next) {
 //Get todo list 
 
 //Add task
+app.get('/add', function(req, res, next) {    
+    // render to add.ejs
+    // res.render('add')
+    res.render('add', {data : {
+        team_member: '',
+        title: '',
+        priority: ''
+    }, error: ''})
+  })
+
+  app.post('/add',  function(req, res, next){
+    // add a new task
+    let team_member = req.body.team_member;
+    let title = req.body.title;
+    let priority = req.body.priority;
+
+    var form_data = {
+        team_member: team_member,
+        title: title,
+        priority: priority
+    }
+    // validae data, and render back to add.ejs if needed
+    if(team_member == '') {
+        res.render('add', {data: form_data, error: "Team member can't be empty"})
+    }
+    else if(title == '') {
+        res.render('add', {data: form_data, error: "Title can't be empty"})
+    }
+    else if(priority == 'Pick priority') {
+        res.render('add', {data: form_data, error: "Please pick priority"})
+    }
+    else {
+        // insert query
+        dbConn.query('INSERT INTO ' + table +' SET ?', form_data, function(err, result) {
+        if (err) {
+            console.error("Couldn't add task: " + err)
+            // render to add.ejs
+            res.render('add', {data: form_data, error: "Couldn't add task: " + err})
+        } else {
+            console.log ('Task '+ title +' was added to DB successfully')          
+            res.redirect('/');
+        }
+        })
+    }
+  })
 
 //Edit task
 
 //Delete task
+app.get('/delete/(:id)', function(req, res, next) {
+    let id = req.params.id;
+    dbConn.query('DELETE FROM ' + table + ' WHERE id = ' + id, function(err, result) {
+        if (err) {
+            // set flash message
+            console.error(err)
+            // render to error page
+            res.render('error-page',{error:err});
+        } else {
+            // set flash message
+            console.log('Task successfully deleted! ID = ' + id)
+            // redirect to books page
+            res.redirect('/')
+        }
+    })
+  })
 
 //Update task
 
