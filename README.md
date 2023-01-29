@@ -25,6 +25,8 @@ This assigment was coded as WEB assignment on the 1nd semester of our 3st year I
   5. create new schema name 'todo-list-app'<br />
   6. open Query tab and execute the script:<br />
   ```bash
+  CREATE SCHEMA `todo-list-app`;
+  ALTER USER <user>@'localhost' IDENTIFIED WITH mysql_native_password BY <password>;
   CREATE TABLE `todo-list-app`.`tasks` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(100) NOT NULL,
