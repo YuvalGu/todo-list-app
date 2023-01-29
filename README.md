@@ -34,7 +34,7 @@ This assigment was coded as WEB assignment on the 1nd semester of our 3st year I
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
   ```
-  <br /><br />
+  <br />
 - **In Project**<br /><br />
   7. open .env file and insert DB conection environment variables (DB_USER, DB_PASSWORD, DB_PORT and also the rest if needed).<br /><br />
 - **Back to Terminal**<br /><br />
