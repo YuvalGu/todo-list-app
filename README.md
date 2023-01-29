@@ -22,8 +22,7 @@ This assigment was coded as WEB assignment on the 1nd semester of our 3st year I
   3. npm install<br />
 - **In SQL Workbench**<br /><br />
   4. create new connection (or open existing one)<br />
-  5. create new schema name 'todo-list-app'<br />
-  6. open Query tab and execute the script:<br />
+  5. open Query tab and execute the script:<br />
   ```bash
   CREATE SCHEMA `todo-list-app`;
   ALTER USER <user>@'localhost' IDENTIFIED WITH mysql_native_password BY <password>;
@@ -36,10 +35,11 @@ This assigment was coded as WEB assignment on the 1nd semester of our 3st year I
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
   ```
+  insert your user name in <user> and insert your password in <password>
   <br />
 - **In Project**<br /><br />
-  7. open .env file and insert DB conection environment variables (DB_USER, DB_PASSWORD, DB_PORT and also the rest if needed).<br /><br />
+  6. open .env file and insert DB conection environment variables (DB_USER, DB_PASSWORD, DB_PORT and also the rest if needed).<br /><br />
 - **Back to Terminal**<br /><br />
-  8. node index.js<br /><br />
+  7. node index.js<br /><br />
 - **In Chrome**<br /><br />
-  9. go to http://localhost:3000
+  8. go to http://localhost:3000
