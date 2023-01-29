@@ -20,7 +20,7 @@ This assigment was coded as WEB assignment on the 1nd semester of our 3st year I
  1. git clone https://github.com/YuvalGu/todo-list-app.git<br />
   2. cd todo-list-app<br />
   3. npm install<br />
-- **In SQL Workbench**<br />
+- **In SQL Workbench**<br /><br />
   4. create new connection (or open existing one)<br />
   5. create new schema name 'todo-list-app'<br />
   6. open Query tab and execute the script:<br />
@@ -31,10 +31,10 @@ This assigment was coded as WEB assignment on the 1nd semester of our 3st year I
     `priority` ENUM('High', 'Middle', 'Low') NOT NULL,
     `is_finished` TINYINT(1) NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);<br />
-- **In Project**<br />
-  7. open .env file and insert DB conection environment variables (DB_USER, DB_PASSWORD, DB_PORT and also the rest if needed).<br />
-- **Back to Terminal**<br />
-  8. node index.js<br />
-- **In Chrome**<br />
+    UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);<br /><br />
+- **In Project**<br /><br />
+  7. open .env file and insert DB conection environment variables (DB_USER, DB_PASSWORD, DB_PORT and also the rest if needed).<br /><br />
+- **Back to Terminal**<br /><br />
+  8. node index.js<br /><br />
+- **In Chrome**<br /><br />
   9. go to http://localhost:3000
